@@ -8,7 +8,8 @@ import 'package:yaml/yaml.dart';
 import 'constants.dart';
 
 void updateGitlabCdCi(File gitlab, String applicationName) {
-  applicationName = applicationName.constantCase;
+  final applicationNameConstantCase = applicationName.constantCase;
+  final applicationNameParamCase = applicationName.paramCase;
   String rawYaml = gitlab.readAsStringSync();
   Map<String, dynamic> yaml =
       json.decode(json.encode(loadYaml(rawYaml))) as Map<String, dynamic>;
@@ -40,14 +41,20 @@ void updateGitlabCdCi(File gitlab, String applicationName) {
     yaml['include'] = includes;
   }
 
-  yaml["\"[STAGING] $applicationName\""] = {
+  yaml["\"[STAGING] $applicationNameConstantCase\""] = {
     "extends": [".deploy-staging", ".deploy-vercel"],
-    "variables": {"APPLICATION_PREFIX": applicationName}
+    "variables": {
+      "APPLICATION_PREFIX": applicationNameConstantCase,
+      "APPLICATION_BASE_PATH": "applications/$applicationNameParamCase",
+    },
   };
 
-  yaml["\"[PRODUCTION] $applicationName\""] = {
+  yaml["\"[PRODUCTION] $applicationNameConstantCase\""] = {
     "extends": [".deploy-production", ".deploy-vercel"],
-    "variables": {"APPLICATION_PREFIX": applicationName}
+    "variables": {
+      "APPLICATION_PREFIX": applicationNameConstantCase,
+      "APPLICATION_BASE_PATH": "applications/$applicationNameParamCase",
+    },
   };
 
   rawYaml = json2yaml(yaml, yamlStyle: YamlStyle.pubspecYaml);
