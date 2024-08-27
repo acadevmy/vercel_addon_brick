@@ -3,15 +3,27 @@ import 'dart:io';
 
 class Vercel {
   void logout() {
-    Process.runSync('corepack', ['pnpm dlx vercel logout']);
+    Process.runSync(
+      'corepack',
+      ['pnpm dlx vercel logout'],
+      runInShell: true,
+    );
   }
 
   void login() {
-    Process.runSync('corepack', ['pnpm dlx vercel login']);
+    Process.runSync(
+      'corepack',
+      ['pnpm dlx vercel login'],
+      runInShell: true,
+    );
   }
 
   VercelProject link() {
-    Process.runSync('corepack', ['pnpm dlx vercel link']);
+    Process.runSync(
+      'corepack',
+      ['pnpm dlx vercel link'],
+      runInShell: true,
+    );
 
     final vercelProject =
         File.fromUri(Directory.current.uri.resolve('.vercel/project.json'));
