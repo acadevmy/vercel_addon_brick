@@ -8,7 +8,7 @@ import 'utilities/environment.dart';
 import 'utilities/vault.dart';
 import 'utilities/vercel.dart';
 
-void run(HookContext context) async {
+void run(HookContext context) {
   final hasGitlabConfiguration =
       File.fromUri(Directory.current.uri.resolve(kGitlabPath)).existsSync();
 
@@ -44,6 +44,8 @@ void run(HookContext context) async {
     final projectId = entry.value.projectId;
     final orgIdVariableName = "${applicationName}_VERCEL_ORG_ID";
     final orgId = entry.value.orgId;
+    final vercelTokenVariableName = "${applicationName}_VERCEL_TOKEN";
+    final vercelToken = entry.value.token;
 
     context.logger.info(
       '🔐 Configuring .env.vault for $envName',
@@ -52,6 +54,7 @@ void run(HookContext context) async {
     context.logger.info(dolumnify(
       [
         ['VARIABLE', 'VALUE'],
+        [vercelTokenVariableName, vercelToken],
         [projectIdVariableName, projectId],
         [orgIdVariableName, orgId],
       ],
@@ -65,23 +68,20 @@ void run(HookContext context) async {
       ..addVariable(
         envName,
         projectIdVariableName,
-        entry.value.projectId,
+        projectId,
       )
       ..addVariable(
         envName,
         orgIdVariableName,
-        entry.value.orgId,
+        orgId,
+      )
+      ..addVariable(
+        envName,
+        vercelTokenVariableName,
+        vercelToken,
       )
       ..push(envName);
   }
-
-  final vercelTokenVariableName = "${applicationName}_VERCEL_TOKEN";
-  final environments =
-      Environment.values.map((environment) => environment.name).join(', ');
-
-  context.logger.alert(
-    "Remember to configure the $vercelTokenVariableName variable to .env.vault for environments $environments",
-  );
 }
 
 void appendToGitlab(HookContext context) {

@@ -5,14 +5,12 @@ class Vault {
   Vault(this.directory);
 
   void pull(String environment) {
-    Process.run(
-        'corepack', ['pnpm', 'dlx', 'dotenv-vault', 'pull', environment],
+    Process.run('pnpm', ['dlx', 'dotenv-vault', 'pull', environment],
         workingDirectory: directory.path);
   }
 
   void push(String environment) {
-    Process.run(
-        'corepack', ['pnpm', 'dlx', 'dotenv-vault', 'push', environment],
+    Process.run('pnpm', ['dlx', 'dotenv-vault', 'push', environment],
         workingDirectory: directory.path);
   }
 
