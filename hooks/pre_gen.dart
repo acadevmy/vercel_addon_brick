@@ -7,7 +7,7 @@ import 'utilities/constants.dart';
 import 'utilities/environment.dart';
 import 'utilities/vercel.dart';
 
-void run(HookContext context) {
+void run(HookContext context) async {
   final vercel = Vercel();
 
   final vercelContext = <Environment, VercelProject>{};
@@ -15,7 +15,7 @@ void run(HookContext context) {
   for (final env in Environment.values) {
     vercel.logout();
     context.logger.info('Configure ${env.name} environment');
-    vercel.login();
+    await vercel.login();
     vercelContext[env] = vercel.link();
   }
 
