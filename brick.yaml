@@ -1,0 +1,12 @@
+name: vercel
+description: A new brick created with the Devmy CLI.
+version: 1.0.0
+
+environment:
+  mason: 0.1.0-dev.57
+
+vars:
+  applicationName:
+    type: string
+    description: The application name
+    prompt: What is the name of this application?

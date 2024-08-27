@@ -1,0 +1,8 @@
+{
+    "version": 2,
+    "regions": ["cdg1"],
+    "framework": "{{framework}}",
+    "buildCommand": "pnpm nx run {{applicationName.paramCase()}}:build",
+    "outputDirectory": "applications/{{applicationName.paramCase()}}/dist",
+    "name": "{{applicationName.paramCase()}}"
+}
