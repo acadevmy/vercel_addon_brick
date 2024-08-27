@@ -91,7 +91,8 @@ void run(HookContext context) {
 }
 
 void appendToGitlab(File gitlab, HookContext context) {
-  final String applicationName = context.vars[kApplicationNameKey];
+  final String applicationName =
+      (context.vars[kApplicationNameKey] as String).constantCase;
 
   gitlab.writeAsStringSync("""
 
@@ -100,14 +101,14 @@ void appendToGitlab(File gitlab, HookContext context) {
     - .deploy-staging
     - .deploy-vercel
   variables:
-    APPLICATION_PREFIX: ${applicationName.constantCase}
+    APPLICATION_PREFIX: $applicationName
 
 "[PRODUCTION] $applicationName":
   extends:
     - .deploy-production
     - .deploy-vercel
   variables:
-    APPLICATION_PREFIX: ${applicationName.constantCase}
+    APPLICATION_PREFIX: $applicationName
 
 """, mode: FileMode.append);
 }
