@@ -10,12 +10,21 @@ class Vercel {
     );
   }
 
-  void login() {
-    Process.runSync(
+  Future<void> login() async {
+    var process = await Process.start(
       'corepack',
       ['pnpm dlx vercel login'],
-      runInShell: true,
     );
+
+    process.stdout.transform(SystemEncoding().decoder).listen((data) {
+      print(data); // Stampa l'output della CLI nel terminale Dart
+    });
+
+    process.stderr.transform(SystemEncoding().decoder).listen((data) {
+      print('Errore: $data');
+    });
+
+    await process.exitCode;
   }
 
   VercelProject link() {
