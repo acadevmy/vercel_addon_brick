@@ -5,6 +5,7 @@ import 'package:mason/mason.dart';
 
 import 'utilities/constants.dart';
 import 'utilities/environment.dart';
+import 'utilities/gitlab.dart';
 import 'utilities/vault.dart';
 import 'utilities/vercel.dart';
 import 'utilities/vercel_context.dart';
@@ -25,8 +26,9 @@ void run(HookContext context) {
     return;
   }
 
+  final String applicationName = context.vars[kApplicationNameKey] as String;
   if (hasGitlabConfiguration) {
-    appendToGitlab(gitlabConfiguration, context);
+    updateGitlabCdCi(gitlabConfiguration, applicationName);
   }
 
   final vault = new Vault(Directory.current.absolute.parent.parent);
@@ -35,8 +37,6 @@ void run(HookContext context) {
 
   final Map<Environment, VercelProject> vercelContext =
       deserializeVercelContext(rawVercelContext);
-
-  final applicationName = context.vars[kApplicationNameKey] as String;
 
   for (final entry in vercelContext.entries) {
     final envName = entry.key.name;
@@ -88,27 +88,4 @@ void run(HookContext context) {
 
     context.logger.info('\n');
   }
-}
-
-void appendToGitlab(File gitlab, HookContext context) {
-  final String applicationName =
-      (context.vars[kApplicationNameKey] as String).constantCase;
-
-  gitlab.writeAsStringSync("""
-
-"[STAGING] $applicationName":
-  extends:
-    - .deploy-staging
-    - .deploy-vercel
-  variables:
-    APPLICATION_PREFIX: $applicationName
-
-"[PRODUCTION] $applicationName":
-  extends:
-    - .deploy-production
-    - .deploy-vercel
-  variables:
-    APPLICATION_PREFIX: $applicationName
-
-""", mode: FileMode.append);
 }
