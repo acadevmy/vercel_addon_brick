@@ -7,6 +7,7 @@ import 'utilities/constants.dart';
 import 'utilities/environment.dart';
 import 'utilities/vault.dart';
 import 'utilities/vercel.dart';
+import 'utilities/vercel_context.dart';
 
 void run(HookContext context) {
   final hasGitlabConfiguration =
@@ -34,15 +35,11 @@ void run(HookContext context) {
     ),
   );
 
-  final Map<Environment, Map<String, dynamic>> rawVercelContext =
-      context.vars[kVercelContextKey];
+  final Map<String, dynamic> rawVercelContext = context.vars[kVercelContextKey];
 
-  final Map<Environment, VercelProject> vercelContext = Map.fromEntries(
-    rawVercelContext.entries.map(
-      (entry) => MapEntry(entry.key, VercelProject.fromJson(entry.value)),
-    ),
-  );
-  
+  final Map<Environment, VercelProject> vercelContext =
+      deserializeVercelContext(rawVercelContext);
+
   final applicationName = context.vars[kApplicationNameKey];
 
   for (final entry in vercelContext.entries) {

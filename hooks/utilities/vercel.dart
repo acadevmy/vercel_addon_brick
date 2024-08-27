@@ -34,9 +34,11 @@ class Vercel {
     final rawJson = vercelProject.readAsStringSync();
     final json = jsonDecode(rawJson) as Map<String, dynamic>;
 
+    print('json $json');
+
     return VercelProject(
-      orgId: json['orgId'],
-      projectId: json['projectId'],
+      orgId: json['orgId'] as String,
+      projectId: json['projectId'] as String,
       token: token,
     );
   }
@@ -53,7 +55,7 @@ class VercelProject {
   VercelProject.fromJson(Map<String, dynamic> json)
       : orgId = json['orgId'] as String,
         projectId = json['projectId'] as String,
-        token = json['token'];
+        token = json['token'] as String;
 
   Map<String, dynamic> toJson() {
     return {
