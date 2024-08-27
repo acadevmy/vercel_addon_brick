@@ -10,8 +10,10 @@ import 'utilities/vercel.dart';
 import 'utilities/vercel_context.dart';
 
 void run(HookContext context) {
-  final hasGitlabConfiguration =
-      File.fromUri(Directory.current.uri.resolve(kGitlabPath)).existsSync();
+  final gitlabConfiguration = File.fromUri(
+      Directory.current.parent.parent.uri.resolve(kGitlabFileName));
+
+  final hasGitlabConfiguration = gitlabConfiguration.existsSync();
 
   final hasPipelineContext = hasGitlabConfiguration;
   if (!hasPipelineContext) {
@@ -23,7 +25,7 @@ void run(HookContext context) {
   }
 
   if (hasGitlabConfiguration) {
-    appendToGitlab(context);
+    appendToGitlab(gitlabConfiguration, context);
   }
 
   context.logger
@@ -88,9 +90,10 @@ void run(HookContext context) {
   }
 }
 
-void appendToGitlab(HookContext context) {
+void appendToGitlab(File gitlab, HookContext context) {
   final String applicationName = context.vars[kApplicationNameKey];
-  final template = """
+
+  gitlab.writeAsStringSync("""
 
 "[STAGING] $applicationName":
   extends:
@@ -105,7 +108,5 @@ void appendToGitlab(HookContext context) {
     - .deploy-vercel
   variables:
     APPLICATION_PREFIX: "$applicationName"
-""";
-
-  Process.run("echo", [template, " > ", kGitlabPath]);
+""", mode: FileMode.append);
 }
