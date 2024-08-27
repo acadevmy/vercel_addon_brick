@@ -10,8 +10,13 @@ import 'utilities/vercel.dart';
 import 'utilities/vercel_context.dart';
 
 void run(HookContext context) {
+  print(Directory.current.absolute);
+  print(Directory.current.absolute.parent);
+  print(Directory.current.absolute.parent.parent);
+  print(Directory.current.absolute.parent.parent.uri.resolve(kGitlabFileName));
   final gitlabConfiguration = File.fromUri(
-      Directory.current.parent.parent.uri.resolve(kGitlabFileName));
+    Directory.current.absolute.parent.parent.uri.resolve(kGitlabFileName),
+  );
 
   final hasGitlabConfiguration = gitlabConfiguration.existsSync();
 
