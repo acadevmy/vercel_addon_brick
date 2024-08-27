@@ -11,12 +11,12 @@ void run(HookContext context) {
   final vercelContext = <Environment, VercelProject>{};
 
   for (final env in Environment.values) {
-    context.logger.prompt('${env.name.upperCase} configuration');
+    context.logger.info('${env.name.upperCase} configuration');
     context.logger.info('Insert VERCEL_TOKEN for ${env.name.upperCase}');
     context.logger.warn(
         '(make sure you enter your application account token and not your personal one)');
     final vercelToken = context.logger.prompt(
-      '(https://vercel.com/account/tokens)',
+      '(https://vercel.com/account/tokens):',
     );
 
     final vercel = Vercel(vercelToken);
