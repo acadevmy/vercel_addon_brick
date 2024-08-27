@@ -34,8 +34,15 @@ void run(HookContext context) {
     ),
   );
 
-  final Map<Environment, VercelProject> vercelContext =
+  final Map<Environment, Map<String, dynamic>> rawVercelContext =
       context.vars[kVercelContextKey];
+
+  final Map<Environment, VercelProject> vercelContext = Map.fromEntries(
+    rawVercelContext.entries.map(
+      (entry) => MapEntry(entry.key, VercelProject.fromJson(entry.value)),
+    ),
+  );
+  
   final applicationName = context.vars[kApplicationNameKey];
 
   for (final entry in vercelContext.entries) {

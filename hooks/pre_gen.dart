@@ -8,7 +8,7 @@ import 'utilities/environment.dart';
 import 'utilities/vercel.dart';
 
 void run(HookContext context) {
-  final vercelContext = <Environment, VercelProject>{};
+  final vercelContext = <Environment, Map<String, dynamic>>{};
 
   for (final env in Environment.values) {
     context.logger.info('${env.name.upperCase} configuration');
@@ -21,7 +21,7 @@ void run(HookContext context) {
 
     final vercel = Vercel(vercelToken);
 
-    vercelContext[env] = vercel.link();
+    vercelContext[env] = vercel.link().toJson();
   }
 
   context.vars[kVercelContextKey] = vercelContext;

@@ -26,7 +26,7 @@ class Vercel {
     final vercelProject = File.fromUri(
       Directory.current.uri.resolve('.vercel/project.json'),
     );
-    
+
     if (!vercelProject.existsSync()) {
       throw Exception("Missing vercel project.json");
     }
@@ -34,7 +34,11 @@ class Vercel {
     final rawJson = vercelProject.readAsStringSync();
     final json = jsonDecode(rawJson) as Map<String, dynamic>;
 
-    return VercelProject.fromJson(json, token);
+    return VercelProject(
+      orgId: json['orgId'],
+      projectId: json['projectId'],
+      token: token,
+    );
   }
 }
 
@@ -46,7 +50,16 @@ class VercelProject {
   VercelProject(
       {required this.orgId, required this.projectId, required this.token});
 
-  VercelProject.fromJson(Map<String, dynamic> json, this.token)
+  VercelProject.fromJson(Map<String, dynamic> json)
       : orgId = json['orgId'] as String,
-        projectId = json['projectId'] as String;
+        projectId = json['projectId'] as String,
+        token = json['token'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'orgId': orgId,
+      'projectId': projectId,
+      'token': token,
+    };
+  }
 }
