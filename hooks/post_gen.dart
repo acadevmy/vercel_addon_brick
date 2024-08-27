@@ -86,7 +86,7 @@ void run(HookContext context) {
       headerSeparator: '=',
     ));
 
-    context.logger.info('\n\n');
+    context.logger.info('\n');
   }
 }
 
@@ -100,13 +100,14 @@ void appendToGitlab(File gitlab, HookContext context) {
     - .deploy-staging
     - .deploy-vercel
   variables:
-    APPLICATION_PREFIX: "$applicationName"
+    APPLICATION_PREFIX: ${applicationName.constantCase}
 
 "[PRODUCTION] $applicationName":
   extends:
     - .deploy-production
     - .deploy-vercel
   variables:
-    APPLICATION_PREFIX: "$applicationName"
+    APPLICATION_PREFIX: ${applicationName.constantCase}
+
 """, mode: FileMode.append);
 }
