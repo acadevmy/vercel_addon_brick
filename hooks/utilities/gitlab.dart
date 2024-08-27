@@ -5,6 +5,8 @@ import 'package:json2yaml/json2yaml.dart';
 import 'package:mason/mason.dart';
 import 'package:yaml/yaml.dart';
 
+import 'constants.dart';
+
 void updateGitlabCdCi(File gitlab, String applicationName) {
   applicationName = applicationName.constantCase;
   String rawYaml = gitlab.readAsStringSync();
@@ -32,7 +34,7 @@ void updateGitlabCdCi(File gitlab, String applicationName) {
     includes.add({
       'file': '/gitlab-ci/vercel.yml',
       'project': 'pillar-1/devops',
-      'ref': 'v1.0.0',
+      'ref': kVercelDevopsConfigVersion,
     });
 
     yaml['include'] = includes;
