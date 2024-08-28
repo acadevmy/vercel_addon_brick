@@ -67,5 +67,4 @@ Press Enter to proceed with the setup...
   final application = Application(directory: Directory.current.absolute);
   context.vars[kVercelFrameworkKey] = application.type.vercelFramework;
   context.vars[kVercelIsNestjsKey] = application.type == ApplicationType.nest;
-  print(context.vars[kVercelIsNestjsKey]);
 }
