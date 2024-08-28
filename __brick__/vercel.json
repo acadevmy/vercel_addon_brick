@@ -1,8 +1,29 @@
 {
     "version": 2,
     "regions": ["cdg1"],
-    "framework": "{{framework}}",
+    {{#framework}}"framework": "{{.}}",{{/framework}}
     "buildCommand": "pnpm nx run {{applicationName.paramCase()}}:build",
-    "outputDirectory": "applications/{{applicationName.paramCase()}}/dist",
+    "outputDirectory": "dist",
+    {{#isNestjs}}
+    "builds": [{
+      "src": "src/main.ts",
+      "use": "@vercel/node"
+    }],
+    "routes": [{
+      "src": "/(.*)",
+      "dest": "src/main.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "HEAD",
+        "CONNECT",
+        "OPTIONS",
+        "TRACE"
+      ]
+    }],
+    {{/isNestjs}}
     "name": "{{applicationName.paramCase()}}"
 }

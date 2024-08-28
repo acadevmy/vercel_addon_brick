@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:mason/mason.dart';
 
 import 'utilities/application.dart';
+import 'utilities/application_type.dart';
 import 'utilities/constants.dart';
 import 'utilities/environment.dart';
 import 'utilities/vercel.dart';
@@ -65,4 +66,5 @@ Press Enter to proceed with the setup...
   context.vars[kVercelContextKey] = serializeVercelContext(vercelContext);
   final application = Application(directory: Directory.current.absolute);
   context.vars[kVercelFrameworkKey] = application.type.vercelFramework;
+  context.vars[kVercelIsNestjsKey] = application.type == ApplicationType.nest;
 }

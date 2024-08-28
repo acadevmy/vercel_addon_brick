@@ -1,6 +1,7 @@
 enum ApplicationType {
   angular('angular'),
-  next('next'),
+  next('nextjs'),
+  nest(null),
   unsupported(null);
 
   final String? vercelFramework;
