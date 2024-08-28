@@ -45,7 +45,7 @@ void updateGitlabCdCi(File gitlab, String applicationName) {
     "extends": [".deploy-staging", ".deploy-vercel"],
     "variables": {
       "APPLICATION_PREFIX": applicationNameConstantCase,
-      "APPLICATION_BASE_PATH": "applications/$applicationNameParamCase",
+      "APPLICATION_NAME": applicationNameParamCase,
     },
   };
 
@@ -53,7 +53,7 @@ void updateGitlabCdCi(File gitlab, String applicationName) {
     "extends": [".deploy-production", ".deploy-vercel"],
     "variables": {
       "APPLICATION_PREFIX": applicationNameConstantCase,
-      "APPLICATION_BASE_PATH": "applications/$applicationNameParamCase",
+      "APPLICATION_NAME": applicationNameParamCase,
     },
   };
 
