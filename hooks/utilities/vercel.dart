@@ -34,8 +34,6 @@ class Vercel {
     final rawJson = vercelProject.readAsStringSync();
     final json = jsonDecode(rawJson) as Map<String, dynamic>;
 
-    print('json $json');
-
     return VercelProject(
       orgId: json['orgId'] as String,
       projectId: json['projectId'] as String,
