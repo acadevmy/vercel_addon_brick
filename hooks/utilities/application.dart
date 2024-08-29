@@ -24,12 +24,6 @@ bool checkIfIsAngularApplication(Directory directory) {
   return File.fromUri(directory.uri.resolve(angularDescriptor)).existsSync();
 }
 
-bool checkIfIsNestJSApplication(Directory directory) {
-  const nestDescriptor = 'nest-cli.json';
-
-  return File.fromUri(directory.uri.resolve(nestDescriptor)).existsSync();
-}
-
 bool checkIfIsNextApplication(Directory directory) {
   final nextDescriptor = Glob("next.config.*");
   return nextDescriptor.listSync(root: directory.path).isNotEmpty;
@@ -38,10 +32,6 @@ bool checkIfIsNextApplication(Directory directory) {
 ApplicationType getApplicationTypeFromDirectory(Directory directory) {
   if (checkIfIsAngularApplication(directory)) {
     return ApplicationType.angular;
-  }
-
-  if (checkIfIsNestJSApplication(directory)) {
-    return ApplicationType.nest;
   }
 
   if (checkIfIsNextApplication(directory)) {

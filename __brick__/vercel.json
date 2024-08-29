@@ -2,26 +2,7 @@
     "version": 2,
     "regions": ["cdg1"],
     {{#framework}}"framework": "{{.}}",{{/framework}}
-    "installCommand": "echo \"Install (SKIPPED): When running pnpm deploy, local monorepo libraries are encapsulated into custom packages and placed in the node_modules folder.\nIf you run pnpm install (pnpm i) again, it would overwrite these custom packages, causing them to be lost.\"",
+    "installCommand": "echo \"Install (SKIPPED): pnpm deploy bundles local libraries into node_modules. Running pnpm install again would overwrite them.\"",
     "buildCommand": "pnpm build",
-    {{#isNestjs}}"builds": [{
-      "src": "src/main.ts",
-      "use": "@vercel/node"
-    }],
-    "routes": [{
-      "src": "/(.*)",
-      "dest": "src/main.ts",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH",
-        "HEAD",
-        "CONNECT",
-        "OPTIONS",
-        "TRACE"
-      ]
-    }],{{/isNestjs}}
     "outputDirectory": "dist"
 }
