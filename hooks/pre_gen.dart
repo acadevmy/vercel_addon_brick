@@ -6,11 +6,35 @@ import 'utilities/application.dart';
 import 'utilities/application_type.dart';
 import 'utilities/constants.dart';
 import 'utilities/environment.dart';
+import 'utilities/interactivity.dart';
 import 'utilities/vercel.dart';
 import 'utilities/vercel_context.dart';
 
 void run(HookContext context) {
-  context.logger.prompt('''
+  final nonInteractive = isNonInteractive(context);
+  final vercelTokens = <Environment, String?>{
+    for (final env in Environment.values)
+      env: readEnvironmentVariable(env.vercelTokenEnvironmentKey),
+  };
+  final missingTokens = Environment.values
+      .where((env) => vercelTokens[env] == null)
+      .map((env) => env.vercelTokenEnvironmentKey)
+      .toList();
+
+  if (nonInteractive && missingTokens.isNotEmpty) {
+    throw Exception(
+      'Missing required environment variables for non-interactive mode: '
+      '${missingTokens.join(', ')} '
+      '(Vercel tokens, see https://vercel.com/account/tokens)',
+    );
+  }
+
+  if (nonInteractive) {
+    context.logger.info(
+      'Vercel configuration setup: using tokens from environment variables',
+    );
+  } else if (missingTokens.isNotEmpty) {
+    context.logger.prompt('''
 ======================================
           Vercel Configuration Setup
 ======================================
@@ -50,13 +74,15 @@ IMPORTANT:
 Press Enter to proceed with the setup...
 
 ''');
+  }
   final vercelContext = <Environment, VercelProject>{};
 
   for (final env in Environment.values) {
     context.logger.info('${env.name.upperCase} configuration');
-    final vercelToken = context.logger.prompt(
-      'Insert VERCEL_TOKEN for ${env.name.upperCase} (https://vercel.com/account/tokens):',
-    );
+    final vercelToken = vercelTokens[env] ??
+        context.logger.prompt(
+          'Insert VERCEL_TOKEN for ${env.name.upperCase} (https://vercel.com/account/tokens):',
+        );
 
     final vercel = Vercel(vercelToken);
 
