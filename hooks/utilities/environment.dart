@@ -10,4 +10,6 @@ enum Environment {
   String toJson() {
     return this.name;
   }
+
+  String get vercelTokenEnvironmentKey => 'VERCEL_TOKEN_${name.toUpperCase()}';
 }
